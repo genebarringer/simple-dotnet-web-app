@@ -25,7 +25,7 @@ pipeline {
                 sh 'dotnet publish SimpleWebApi --no-restore  -o published' 
             }
             post {
-              sucess {
+              success {
                     archiveArtifacts artifacts: 'published/**', fingerprint: true
                 }
             }
