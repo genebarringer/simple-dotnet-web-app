@@ -7,5 +7,15 @@ pipeline {
                 sh 'dotnet build --no-restore' 
             }
         }
+        stage('Test') {
+            steps {
+                sh 'dotnet test --no-build --collect "XPlat Code Coverage"'
+            }
+            post {
+                always {
+                    recordCoverage(tools: [[parser: 'COBERTURA', pattern: '**/*.xml']], sourceDirectories: [[path: 'SimpleWebApi.Test/TestResults']])
+                }
+            }
+        }
     }
 }
