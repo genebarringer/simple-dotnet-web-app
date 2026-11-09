@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    options {
+      skipStageAfterUnstable()
+    }
     stages {
         stage('Build') { 
             steps {
@@ -17,5 +20,16 @@ pipeline {
                 }
             }
         }
+        stage('Deliver') {
+            steps {
+                sh 'dotnet publish SimpleWebApi --no-restore  -o published' 
+            }
+            post {
+              sucess {
+                    archiveArtifacts artifacts: 'published/**', fingerprint: true
+                }
+            }
+        }
+
     }
 }
